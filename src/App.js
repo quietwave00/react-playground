@@ -22,23 +22,26 @@ function App() {
     {
       id: 1,
       username: 'velopert',
-      email: 'public.velopert@gmail.com'
+      email: 'public.velopert@gmail.com',
+      active: true
     },
     {
       id: 2,
       username: 'tester',
-      email: 'tester@example.com'
+      email: 'tester@example.com',
+      active: false
     },
     {
       id: 3,
       username: 'liz',
-      email: 'liz@example.com'
+      email: 'liz@example.com',
+      active: false
     }
   ]);
 
   const nextId = useRef(4);
+  // 생성
   const onCreate = () => {
-    // 항목 추가 로직
     const user = {
       id: nextId.current,
       username,
@@ -52,6 +55,21 @@ function App() {
     });
     nextId.current += 1;
   };
+
+  // 삭제
+  const onRemove = (id) => {
+    setUsers(users.filter(user => user.id !== id));
+  };
+
+  // 토글
+  const onToggle = (id) => {
+    setUsers(
+      users.map(user =>
+        user.id === id ? { ...user, active: !user.active } : user
+      )
+    );
+  };
+
   return (
     <>
       <CreateUser
@@ -60,7 +78,7 @@ function App() {
         onChange={onChange}
         onCreate={onCreate}
       />
-      <UserList users={users} />
+      <UserList users={users} onRemove={onRemove} onToggle={onToggle}/>
     </>
   );
 }
